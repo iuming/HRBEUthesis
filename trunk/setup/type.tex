@@ -1,0 +1,110 @@
+% -*-coding: utf-8 -*-
+% File: setup/type.tex
+%
+% 修改自: PlutoThesis_UTF8_1.9.4.20100419.zip
+%         http://code.google.com/p/plutothesis/
+%
+%
+%%% 学位类型的一些定义
+
+
+
+%% 导言区使用中文
+
+\makeatletter  % 将特殊符号 @ 当作普通字母
+\@tempcnta=128 % 定义变量 \@tempcnta 为 128
+\loop % 开始一个循环
+  \catcode\@tempcnta=13
+  \ifnum\@tempcnta<255
+    \advance \@tempcnta \@ne
+  \repeat
+\makeatother % 恢复 @ 符号的原义
+
+
+
+%% 判断论文类型
+
+
+% 声明下面三个新的逻辑型变量
+
+\newif\ifxueweidoctor
+\newif\ifxueweimaster
+\newif\ifxueweibachelor
+
+% 根据 \xuewei 的定义为 \xueweidoctor \xueweimaster \xueweibachelor 赋值
+
+\def\temp{Doctor}
+\ifx\temp\xuewei % \ifx 用于判断两个变量是否匹配
+  \xueweidoctortrue  \xueweimasterfalse \xueweibachelorfalse
+\fi
+\def\temp{Master}
+\ifx\temp\xuewei
+  \xueweidoctorfalse  \xueweimastertrue \xueweibachelorfalse
+\fi
+\def\temp{Bachelor}
+\ifx\temp\xuewei
+  \xueweidoctorfalse  \xueweimasterfalse \xueweibachelortrue
+\fi
+
+% 根据上面变量定义学位相关的几个命令
+
+\ifxueweidoctor
+  \newcommand{\cxuewei}{博士}
+  \newcommand{\exuewei}{Doctor}
+  \newcommand{\exueweier}{Doctoral}
+  \newcommand{\xueweishort}{博}
+\fi
+
+\ifxueweimaster
+  \newcommand{\cxuewei}{硕士}
+  \newcommand{\exuewei}{Master}
+  \newcommand{\exueweier}{Master}
+  \newcommand{\xueweishort}{硕}
+\fi
+
+\ifxueweibachelor
+  \newcommand{\cxuewei}{本科生}
+  \newcommand{\exuewei}{Bachelor}
+  \newcommand{\exueweier}{Bachelor}
+  \newcommand{\xueweishort}{本}
+\fi
+
+
+
+%% 决定单双面打印
+
+% 根据学位决定单双面打印
+
+\ifxueweidoctor % 哈工程博士双面打印
+  \def\oneortwoside{twoside}
+\fi
+
+\ifxueweidoctor % 哈工程硕士双面打印
+  \def\oneortwoside{twoside}
+\fi
+
+\ifxueweibachelor % 哈工程本科论文单面打印
+  \def\oneortwoside{oneside}
+\fi
+
+% 若 \oneortwoside 没有定义, 使用默认(这个情况应该不会发生了)
+
+\ifx\oneortwoside\undefined
+  \def\oneortwoside{oneside}
+\fi
+
+
+
+%% 定义布尔变量 \oneortwoside
+
+\newif\ifoneortwoside
+
+% 根据前面的 \oneortwoside 变量内容决定该布尔变量真假
+% twoside 为 true
+
+\def\temp{twoside}
+\ifx\temp\oneortwoside
+  \oneortwosidetrue
+\else
+  \oneortwosidefalse
+\fi
